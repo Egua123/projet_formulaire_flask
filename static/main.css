@@ -1,0 +1,94 @@
+body {
+    background-color: #f5f7fb;
+    color: #1f2937;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-content {
+    min-height: 100vh;
+}
+
+/* NAVBAR */
+.app-navbar {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(8px);
+}
+
+.custom-nav-link {
+    color: #e5e7eb !important;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.custom-nav-link:hover {
+    color: #ffffff !important;
+}
+
+/* HERO */
+.hero-section {
+    background-image: url("/static/images/coaching-hero.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.hero-overlay {
+    background: linear-gradient(
+        to right,
+        rgba(15, 23, 42, 0.82),
+        rgba(30, 41, 59, 0.68)
+    );
+}
+
+.hero-card {
+    color: white;
+    padding: 2rem 0;
+}
+
+.info-panel {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.feature-list {
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+}
+
+.feature-list li {
+    margin-bottom: 0.8rem;
+}
+
+/* CARDS */
+.feature-card {
+    border-radius: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* FORMULAIRES / PAGES FUTURES */
+.form-section {
+    padding: 3rem 0;
+}
+
+.form-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* UTILITAIRES */
+.min-vh-75 {
+    min-height: 75vh;
+}

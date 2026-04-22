@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-overlay">
+        <div class="container py-5">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-7">
+                    <div class="hero-card">
+                        <span class="badge bg-primary-subtle text-primary-emphasis mb-3 px-3 py-2 rounded-pill">
+                            Coaching personnalisé
+                        </span>
+
+                        <h1 class="display-5 fw-bold mb-3">
+                            Construis ton point de départ avec App Coaching
+                        </h1>
+
+                        <p class="lead mb-4">
+                            Renseigne ton profil, tes objectifs et ton niveau d’entraînement
+                            pour démarrer avec une base claire, simple et structurée.
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="{{ url_for('evaluation') }}" class="btn btn-primary btn-lg px-4">
+                                Commencer l’évaluation
+                            </a>
+                            <a href="{{ url_for('appointment') }}" class="btn btn-outline-light btn-lg px-4">
+                                Prendre rendez-vous
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 mt-4 mt-lg-0">
+                    <div class="info-panel">
+                        <h2 class="h4 fw-semibold mb-3">Ce que tu peux faire</h2>
+                        <ul class="feature-list">
+                            <li>Remplir ton évaluation initiale</li>
+                            <li>Présenter tes objectifs de remise en forme</li>
+                            <li>Indiquer ton niveau et tes disponibilités</li>
+                            <li>Préparer une première prise de contact</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Une application simple pour bien démarrer</h2>
+            <p class="text-muted mb-0">
+                Une première étape claire avant d’aller vers un accompagnement plus complet.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Évaluation initiale</h3>
+                        <p class="text-muted mb-0">
+                            Recueille les informations essentielles sur ton profil, ton niveau et tes objectifs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Demandes centralisées</h3>
+                        <p class="text-muted mb-0">
+                            Consulte facilement les soumissions enregistrées dans l’application.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card feature-card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3">Prise de rendez-vous</h3>
+                        <p class="text-muted mb-0">
+                            Ajoute une étape concrète pour aller du simple formulaire à une vraie action.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
