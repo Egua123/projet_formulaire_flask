@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from forms import EvaluationForm
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'e7a7821dce87007b9d9a53d4a7b366031139242aa986025a6ed74a23fed5b953'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///one.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -37,62 +39,33 @@ def index():
 
 @app.route("/evaluation", methods=["GET", "POST"])
 def evaluation():
-    if request.method == "POST":
-        prenom = request.form.get("prenom")
-        nom = request.form.get("nom")
-        email = request.form.get("email")
-        sexe = request.form.get("sexe")
-        niveau = request.form.get("niveau")
-        objectif = request.form.get("objectif")
-        frequence_activite = request.form.get("frequence_activite")
-
-        try:
-            age = int(request.form.get("age"))
-            taille = float(request.form.get("taille"))
-            poids = float(request.form.get("poids"))
-            heures_sommeil = float(request.form.get("heures_sommeil"))
-            repas_par_jour = int(request.form.get("repas_par_jour"))
-
-            if age < 0 or age >=120 :
-                return "Erreur : valeurs invalides"
-            if taille < 0 or taille > 290 :
-                return "Erreur : valeurs invalides"
-            if poids < 0  :
-                return "Erreur : valeurs invalides"
-
-            if heures_sommeil < 0 :
-                return "Erreur : valeurs invalides"
-            
-
-            if repas_par_jour < 0 :
-                return "Erreur : valeurs invalides"
-            
-            
-
-        except (TypeError, ValueError):
-            return "Erreur : un ou plusieurs champs numériques sont invalides."
+    form = EvaluationForm()
+    if form.validate_on_submit():
 
         client = ClientFormEvaluation(
-            prenom=prenom,
-            nom=nom,
-            email=email,
-            age=age,
-            sexe=sexe,
-            taille=taille,
-            poids=poids,
-            objectif=objectif,
-            heures_sommeil=heures_sommeil,   
-            repas_par_jour=repas_par_jour,
-            niveau=niveau,
-            frequence_activite=frequence_activite,
+            prenom=form.prenom.data,
+            nom=form.nom.data,
+            email=form.email.data,
+            age=form.age.data,
+            sexe=form.sexe.data,
+            taille=form.taille.data,
+            poids=form.poids.data,
+            objectif=form.objectif.data,
+            heures_sommeil=form.heures_sommeil.data,
+            repas_par_jour=form.repas_par_jour.data,
+            niveau=form.niveau.data,
+            frequence_activite=form.frequence_activite.data,
         )
+
+        
 
         db.session.add(client)
         db.session.commit()
+        flash("La demande a été envoyée avec succès.", "success")
 
         return redirect(url_for("submissions"))
 
-    return render_template("evaluation.html")
+    return render_template("evaluation.html", form=form)
 
 
 @app.route("/submissions")

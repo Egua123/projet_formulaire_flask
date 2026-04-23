@@ -15,49 +15,59 @@
                         </p>
                     </div>
 
-                    <form method="POST" action="{{ url_for('evaluation') }}">
+                    <form method="POST" action="{{ url_for('evaluation') }}" novalidate>
+                        {{ form.hidden_tag() }}
+
                         <fieldset class="mb-4">
                             <legend class="section-legend">Informations personnelles</legend>
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="prenom" class="form-label">Prénom</label>
-                                    <input type="text" class="form-control" id="prenom" name="prenom" required>
+                                    {{ form.prenom.label(class="form-label") }}
+                                    {{ form.prenom(class_="form-control" ~ (" is-invalid" if form.prenom.errors else ""), placeholder="Votre prénom") }}
+                                    {% for error in form.prenom.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="nom" class="form-label">Nom</label>
-                                    <input type="text" class="form-control" id="nom" name="nom" required>
+                                    {{ form.nom.label(class="form-label") }}
+                                    {{ form.nom(class_="form-control" ~ (" is-invalid" if form.nom.errors else ""), placeholder="Votre nom") }}
+                                    {% for error in form.nom.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    {{ form.email.label(class="form-label") }}
+                                    {{ form.email(class_="form-control" ~ (" is-invalid" if form.email.errors else ""), placeholder="exemple@email.com") }}
+                                    {% for error in form.email.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="age" class="form-label">Âge</label>
-                                    <input type="number" class="form-control" id="age" name="age" required>
+                                    {{ form.age.label(class="form-label") }}
+                                    {{ form.age(class_="form-control" ~ (" is-invalid" if form.age.errors else ""), min="0", max="120") }}
+                                    {% for error in form.age.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label for="sexe" class="form-label">Sexe</label>
-                                    <select class="form-select" id="sexe" name="sexe" required>
-                                        <option value="" selected disabled>Choisir</option>
-                                        <option value="M">Masculin</option>
-                                        <option value="F">Féminin</option>
-                                        <option value="Autre">Autre</option>
-                                    </select>
+                                    {{ form.sexe.label(class="form-label") }}
+                                    {{ form.sexe(class_="form-select" ~ (" is-invalid" if form.sexe.errors else "")) }}
+                                    {% for error in form.sexe.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="niveau" class="form-label">Niveau</label>
-                                    <select class="form-select" id="niveau" name="niveau" required>
-                                        <option value="" selected disabled>Choisir</option>
-                                        <option value="debutant">Débutant</option>
-                                        <option value="intermediaire">Intermédiaire</option>
-                                        <option value="avance">Avancé</option>
-                                    </select>
+                                    {{ form.niveau.label(class="form-label") }}
+                                    {{ form.niveau(class_="form-select" ~ (" is-invalid" if form.niveau.errors else "")) }}
+                                    {% for error in form.niveau.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </fieldset>
@@ -67,13 +77,19 @@
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="taille" class="form-label">Taille (cm)</label>
-                                    <input type="number" class="form-control" id="taille" name="taille" step="0.1" min="0" max ="300" required>
+                                    {{ form.taille.label(class="form-label") }}
+                                    {{ form.taille(class_="form-control" ~ (" is-invalid" if form.taille.errors else ""), min="0", max="290", step="0.1") }}
+                                    {% for error in form.taille.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="poids" class="form-label">Poids (kg)</label>
-                                    <input type="number" class="form-control" id="poids" name="poids" step="0.1" min="0" required>
+                                    {{ form.poids.label(class="form-label") }}
+                                    {{ form.poids(class_="form-control" ~ (" is-invalid" if form.poids.errors else ""), min="0", step="0.1") }}
+                                    {% for error in form.poids.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </fieldset>
@@ -83,42 +99,46 @@
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="heures_sommeil" class="form-label">Heures de sommeil par nuit</label>
-                                    <input type="number" class="form-control" id="heures_sommeil" name="heures_sommeil" step="1"  required>
+                                    {{ form.heures_sommeil.label(class="form-label") }}
+                                    {{ form.heures_sommeil(class_="form-control" ~ (" is-invalid" if form.heures_sommeil.errors else ""), min="0", max="24", step="0.1") }}
+                                    {% for error in form.heures_sommeil.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="repas_par_jour" class="form-label">Repas par jour</label>
-                                    <input type="number" class="form-control" id="repas_par_jour" name="repas_par_jour" min="0" required>
+                                    {{ form.repas_par_jour.label(class="form-label") }}
+                                    {{ form.repas_par_jour(class_="form-control" ~ (" is-invalid" if form.repas_par_jour.errors else ""), min="0", max="15") }}
+                                    {% for error in form.repas_par_jour.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="frequence_activite" class="form-label">Fréquence d'activité</label>
-                                    <select class="form-select" id="frequence_activite" name="frequence_activite" required>
-                                        <option value="" selected disabled>Choisir</option>
-                                        <option value="faible">Faible</option>
-                                        <option value="moderee">Modérée</option>
-                                        <option value="elevee">Élevée</option>
-                                    </select>
+                                    {{ form.frequence_activite.label(class="form-label") }}
+                                    {{ form.frequence_activite(class_="form-select" ~ (" is-invalid" if form.frequence_activite.errors else "")) }}
+                                    {% for error in form.frequence_activite.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="objectif" class="form-label">Objectif</label>
-                                    <textarea
-                                        class="form-control"
-                                        id="objectif"
-                                        name="objectif"
-                                        rows="5"
+                                    {{ form.objectif.label(class="form-label") }}
+                                    {{ form.objectif(
+                                        class_="form-control" ~ (" is-invalid" if form.objectif.errors else ""),
+                                        rows="5",
                                         placeholder="Décrivez votre objectif, vos habitudes, votre contexte et le plus d'informations utiles possible."
-                                        required
-                                    ></textarea>
+                                    ) }}
+                                    {% for error in form.objectif.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </fieldset>
 
                         <div class="d-grid d-md-flex justify-content-md-end gap-2">
                             <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Retour</a>
-                            <button type="submit" class="btn btn-primary px-4">Envoyer la demande</button>
+                            {{ form.submit(class="btn btn-primary px-4") }}
                         </div>
                     </form>
                 </div>
