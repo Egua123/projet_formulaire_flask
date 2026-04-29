@@ -15,13 +15,13 @@ body {
 }
 
 .custom-nav-link {
-    color: #e5e7eb !important;
+    color: #cbd5f5 !important;  /* un gris légèrement bleuté */
     font-weight: 500;
-    transition: color 0.2s ease-in-out;
+    transition: all 0.2s ease;
 }
 
 .custom-nav-link:hover {
-    color: #ffffff !important;
+    color: #3b82f6 !important; /* bleu moderne */
 }
 
 /* HERO */

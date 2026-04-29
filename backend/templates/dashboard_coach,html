@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashbord Coach{% endblock %}
+
+{% block content %}
+    <h1 class="display-5 fw-bold mb-3">
+                            Construis ton point de départ avec App Coaching
+    </h1>
+{% endblock %}

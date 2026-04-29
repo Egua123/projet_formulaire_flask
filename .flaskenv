@@ -1,0 +1,2 @@
+FLASK_APP=formulaire.py
+FLASK_ENV=development
