@@ -1,2 +1,2 @@
-FLASK_APP=formulaire.py
+FLASK_APP=backend
 FLASK_ENV=development

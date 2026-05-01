@@ -1,5 +1,14 @@
-from backend import db
+from backend import db, login_manager
+from flask_login import UserMixin
 from datetime import datetime
+
+
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 class ClientFormEvaluation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,7 +30,7 @@ class ClientFormEvaluation(db.Model):
             f"ClientFormEvaluation('{self.prenom}', '{self.nom}', '{self.email}')"
         )
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id= db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(160), unique=True, nullable=False)
