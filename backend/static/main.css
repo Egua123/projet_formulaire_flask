@@ -92,3 +92,11 @@ body {
 .min-vh-75 {
     min-height: 75vh;
 }
+
+.account-img {
+    width: clamp(80px, 14vw, 125px);
+    height: clamp(80px, 14vw, 125px);
+    object-fit: cover;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
