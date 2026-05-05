@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard coach{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+
+        <!-- En-tête -->
+        <div class="mb-4">
+            <p class="text-muted mb-1">Espace coach</p>
+            <h1 class="fw-bold">Bonjour Coach {{ current_user.username }}</h1>
+            <p class="text-muted">
+                Bienvenue dans ton espace coach. Ici, tu peux consulter les demandes clients,
+                gérer les suivis et organiser ton accompagnement.
+            </p>
+        </div>
+
+        <!-- Résumé -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Profil coach</h5>
+                        <p class="card-text text-muted mb-1">
+                            Nom d’utilisateur : {{ current_user.username }}
+                        </p>
+                        <p class="card-text text-muted mb-0">
+                            Rôle : {{ current_user.role }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Demandes clients</h5>
+                        <p class="card-text text-muted">
+                            Consulte les évaluations envoyées par les clients pour préparer les suivis.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Organisation</h5>
+                        <p class="card-text text-muted">
+                            Utilise cet espace comme point central pour suivre tes clients et tes rendez-vous.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions principales -->
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Demandes clients</h5>
+                        <p class="card-text text-muted">
+                            Voir les formulaires d’évaluation envoyés par les clients.
+                        </p>
+                        <a href="{{ url_for('submissions') }}" class="btn btn-primary mt-auto">
+                            Voir les demandes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Gestion des clients</h5>
+                        <p class="card-text text-muted">
+                            Accède à la liste de tes clients et à leurs informations de suivi.
+                        </p>
+                        <!-- Route à ajouter plus tard, par exemple url_for('coach_clients') -->
+                        <a href="#" class="btn btn-outline-primary mt-auto">
+                            Gérer les clients
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Rendez-vous</h5>
+                        <p class="card-text text-muted">
+                            Consulte ou organise les rendez-vous avec tes clients.
+                        </p>
+                        <!-- Route à ajouter plus tard, par exemple url_for('coach_appointments') -->
+                        <a href="#" class="btn btn-outline-primary mt-auto">
+                            Voir les rendez-vous
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Programmes</h5>
+                        <p class="card-text text-muted">
+                            Crée ou gère les programmes d’entraînement personnalisés.
+                        </p>
+                        <!-- Route à ajouter plus tard, par exemple url_for('coach_programs') -->
+                        <a href="#" class="btn btn-outline-primary mt-auto">
+                            Gérer les programmes
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Mon compte</h5>
+                        <p class="card-text text-muted">
+                            Consulte ou modifie les informations de ton compte coach.
+                        </p>
+                        <a href="{{ url_for('account') }}" class="btn btn-outline-primary mt-auto">
+                            Accéder à mon compte
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Évaluation initiale{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="form-card">
+                    <div class="mb-4">
+                        <h1 class="h2 mb-2">Évaluation initiale</h1>
+                        <p class="text-muted mb-0">
+                            Remplissez ce formulaire pour une première analyse de votre profil et de vos objectifs.
+                        </p>
+                    </div>
+
+                    <form method="POST" action="{{ form_action }}" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <fieldset class="mb-4">
+                            <legend class="section-legend">Informations personnelles</legend>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.prenom.label(class="form-label") }}
+                                    {{ form.prenom(class_="form-control" ~ (" is-invalid" if form.prenom.errors else ""), placeholder="Votre prénom") }}
+                                    {% for error in form.prenom.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {{ form.nom.label(class="form-label") }}
+                                    {{ form.nom(class_="form-control" ~ (" is-invalid" if form.nom.errors else ""), placeholder="Votre nom") }}
+                                    {% for error in form.nom.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {{ form.email.label(class="form-label") }}
+                                    {{ form.email(class_="form-control" ~ (" is-invalid" if form.email.errors else ""), placeholder="exemple@email.com") }}
+                                    {% for error in form.email.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-3">
+                                    {{ form.age.label(class="form-label") }}
+                                    {{ form.age(class_="form-control" ~ (" is-invalid" if form.age.errors else ""), min="0", max="120") }}
+                                    {% for error in form.age.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-3">
+                                    {{ form.sexe.label(class="form-label") }}
+                                    {{ form.sexe(class_="form-select" ~ (" is-invalid" if form.sexe.errors else "")) }}
+                                    {% for error in form.sexe.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {{ form.niveau.label(class="form-label") }}
+                                    {{ form.niveau(class_="form-select" ~ (" is-invalid" if form.niveau.errors else "")) }}
+                                    {% for error in form.niveau.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="mb-4">
+                            <legend class="section-legend">Données physiques</legend>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.taille.label(class="form-label") }}
+                                    {{ form.taille(class_="form-control" ~ (" is-invalid" if form.taille.errors else ""), min="0", max="290", step="0.1") }}
+                                    {% for error in form.taille.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {{ form.poids.label(class="form-label") }}
+                                    {{ form.poids(class_="form-control" ~ (" is-invalid" if form.poids.errors else ""), min="0", step="0.1") }}
+                                    {% for error in form.poids.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="mb-4">
+                            <legend class="section-legend">Habitudes de vie</legend>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    {{ form.heures_sommeil.label(class="form-label") }}
+                                    {{ form.heures_sommeil(class_="form-control" ~ (" is-invalid" if form.heures_sommeil.errors else ""), min="0", max="24", step="0.1") }}
+                                    {% for error in form.heures_sommeil.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {{ form.repas_par_jour.label(class="form-label") }}
+                                    {{ form.repas_par_jour(class_="form-control" ~ (" is-invalid" if form.repas_par_jour.errors else ""), min="0", max="15") }}
+                                    {% for error in form.repas_par_jour.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-12">
+                                    {{ form.frequence_activite.label(class="form-label") }}
+                                    {{ form.frequence_activite(class_="form-select" ~ (" is-invalid" if form.frequence_activite.errors else "")) }}
+                                    {% for error in form.frequence_activite.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="col-12">
+                                    {{ form.objectif.label(class="form-label") }}
+                                    {{ form.objectif(
+                                        class_="form-control" ~ (" is-invalid" if form.objectif.errors else ""),
+                                        rows="5",
+                                        placeholder="Décrivez votre objectif, vos habitudes, votre contexte et le plus d'informations utiles possible."
+                                    ) }}
+                                    {% for error in form.objectif.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="d-grid d-md-flex justify-content-md-end gap-2">
+                            {% if current_user.is_authenticated and current_user.role == "client" %}
+                                <a href="{{ url_for('client_evaluation') }}" class="btn btn-outline-secondary">Retour</a>
+                            {% else %}
+                                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Retour</a>
+                            {% endif %}
+                            {{ form.submit(class="btn btn-primary px-4") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

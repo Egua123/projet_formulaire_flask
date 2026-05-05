@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Traiter la demande{% endblock %}
+
+{% block content %}
+<section class="form-section">
+    <div class="container">
+        <div class="form-card">
+            <div class="mb-4">
+                <h1 class="h2 mb-2">Traiter la demande</h1>
+                <p class="text-muted mb-0">
+                    Demande de {{ demande.prenom }} {{ demande.nom }}
+                </p>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="h5">Résumé client</h2>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <p><strong>Email :</strong> {{ demande.email }}</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <p><strong>Âge :</strong> {{ demande.age }}</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <p><strong>Sexe :</strong> {{ demande.sexe }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p><strong>Niveau :</strong> {{ demande.niveau }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p><strong>Taille :</strong> {{ demande.taille }} cm</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p><strong>Poids :</strong> {{ demande.poids }} kg</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p><strong>Sommeil :</strong> {{ demande.heures_sommeil }} h</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p><strong>Repas/jour :</strong> {{ demande.repas_par_jour }}</p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <p><strong>Activité :</strong> {{ demande.frequence_activite }}</p>
+                    </div>
+
+                    <div class="col-12">
+                        <p><strong>Objectif :</strong></p>
+                        <p class="text-muted">{{ demande.objectif }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.status.label(class="form-label") }}
+                    {{ form.status(class="form-select") }}
+
+                    {% for error in form.status.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.coach_note.label(class="form-label") }}
+                    {{ form.coach_note(
+                        class="form-control",
+                        rows="5",
+                        placeholder="Ajouter une note interne pour le suivi du client..."
+                    ) }}
+
+                    {% for error in form.coach_note.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('submissions') }}" class="btn btn-outline-secondary">
+                        Retour aux demandes
+                    </a>
+
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
