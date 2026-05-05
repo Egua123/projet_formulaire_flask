@@ -34,7 +34,11 @@
             <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                 <div class="navbar-nav align-items-lg-center gap-lg-2">
                     <a class="nav-link custom-nav-link" href="{{ url_for('index') }}">Accueil</a>
-                    <a class="nav-link custom-nav-link" href="{{ url_for('evaluation') }}">Évaluation initiale</a>
+                    {% if current_user.is_authenticated and current_user.role == "client" %}
+                        <a class="nav-link custom-nav-link" href="{{ url_for('client_evaluation') }}">
+                            Ma demande
+                        </a>
+                    {% endif %}
                     {% if current_user.is_authenticated and (current_user.role == "coach" or current_user.role == "admin") %}
                         <a class="nav-link custom-nav-link" href="{{ url_for('submissions') }}">Demandes</a>
                     {% endif %}

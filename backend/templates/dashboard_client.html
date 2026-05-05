@@ -62,12 +62,37 @@
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Évaluation initiale</h5>
-                        <p class="card-text text-muted">
-                            Remplis ou mets à jour tes informations de départ pour permettre un meilleur suivi.
-                        </p>
-                        <a href="{{ url_for('evaluation') }}" class="btn btn-primary mt-auto">
-                            Remplir l’évaluation
-                        </a>
+
+                        {% if demande %}
+                            <p class="card-text text-muted mb-2">
+                                Statut : {{ demande.status }}
+                                {% if demande.is_archived %}
+                                    <span class="badge bg-secondary ms-1">Archivée</span>
+                                {% endif %}
+                            </p>
+
+                            {% if demande.is_archived %}
+                                <p class="card-text text-muted">
+                                    Ta demande est archivée. Tu peux la consulter, mais elle ne peut plus être modifiée.
+                                </p>
+                            {% else %}
+                                <p class="card-text text-muted">
+                                    Consulte ou mets à jour tes informations de départ pour ton suivi.
+                                </p>
+                            {% endif %}
+
+                            <a href="{{ url_for('client_evaluation') }}" class="btn btn-primary mt-auto">
+                                Voir ma demande
+                            </a>
+                        {% else %}
+                            <p class="card-text text-muted">
+                                Tu n’as pas encore rempli ton évaluation initiale.
+                            </p>
+
+                            <a href="{{ url_for('evaluation') }}" class="btn btn-primary mt-auto">
+                                Remplir ma demande
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

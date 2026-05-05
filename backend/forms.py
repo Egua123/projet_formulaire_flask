@@ -161,3 +161,25 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
+class CoachTraitementForm(FlaskForm):
+    status = SelectField(
+        "Statut",
+        choices=[
+            ("nouvelle", "Nouvelle"),
+            ("en_cours", "En cours"),
+            ("approuvee", "Approuvée"),
+            ("refusee", "Refusée")
+        ],
+        validators=[DataRequired()]
+    )
+
+    coach_note = TextAreaField(
+        "Note du coach",
+        validators=[
+            Length(max=1000, message="La note ne doit pas dépasser 1000 caractères.")
+        ]
+    )
+
+    submit = SubmitField("Enregistrer le suivi")

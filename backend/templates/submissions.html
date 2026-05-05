@@ -11,7 +11,26 @@
                     <h1 class="h2 mb-1">Demandes reçues</h1>
                     <p class="text-muted mb-0">Voici les formulaires enregistrés dans la base de données.</p>
                 </div>
-                <a href="{{ url_for('evaluation') }}" class="btn btn-primary">Nouvelle évaluation</a>
+                <a href="{{ url_for('dashboard_coach') }}" class="btn btn-outline-primary">
+                    Retour dashboard coach
+                </a>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="{{ url_for('submissions', filtre='actives') }}"
+                   class="btn {% if filtre == 'actives' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    Actives
+                </a>
+
+                <a href="{{ url_for('submissions', filtre='archivees') }}"
+                   class="btn {% if filtre == 'archivees' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    Archivées
+                </a>
+
+                <a href="{{ url_for('submissions', filtre='toutes') }}"
+                   class="btn {% if filtre == 'toutes' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    Toutes
+                </a>
             </div>
 
             {% if demandes %}
@@ -31,9 +50,12 @@
                                 <th>Repas/jour</th>
                                 <th>Activité</th>
                                 <th>Objectif</th>
-                                <th>Modification</th>
+                                <th>Statut</th>
+                                <th>Archivage</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {% for demande in demandes %}
                                 <tr>
@@ -49,21 +71,62 @@
                                     <td>{{ demande.repas_par_jour }}</td>
                                     <td>{{ demande.frequence_activite }}</td>
                                     <td class="objective-cell">{{ demande.objectif }}</td>
+
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            {{ demande.status }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {% if demande.is_archived %}
+                                            <span class="badge bg-dark">
+                                                Archivée
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                Active
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
                                     <td>
                                         <div class="d-flex flex-nowrap gap-2">
-                                            <a href="{{ url_for('edit', id=demande.id) }}" class="btn btn-sm btn-warning">
-                                                Update
-                                            </a>
-                                       
+                                            {% if not demande.is_archived %}
+                                                <a href="{{ url_for('traiter_demande', id=demande.id) }}"
+                                                class="btn btn-sm btn-warning">
+                                                    Traiter
+                                                </a>
+                                            {% else %}
+                                                <a href="{{ url_for('traiter_demande', id=demande.id) }}"
+                                                class="btn btn-sm btn-outline-warning">
+                                                    Voir suivi
+                                                </a>
+                                            {% endif %}
 
-                                            <form action="{{ url_for('delete', id=demande.id) }}" method="POST"   onsubmit="return confirm('Supprimer cette demande ?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            {% if not demande.is_archived %}
+                                                <form
+                                                    action="{{ url_for('archive_demande', id=demande.id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Archiver cette demande ?');"
+                                                >
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        Archiver
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <form
+                                                    action="{{ url_for('desarchive_demande', id=demande.id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Désarchiver cette demande ?');"
+                                                >
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                                        Désarchiver
+                                                    </button>
+                                                </form>
+                                            {% endif %}
                                         </div>
                                     </td>
-                                    
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -72,8 +135,20 @@
             {% else %}
                 <div class="empty-state text-center py-5">
                     <h2 class="h4 mb-2">Aucune demande pour le moment</h2>
-                    <p class="text-muted mb-4">Commence par remplir le formulaire d’évaluation initiale.</p>
-                    <a href="{{ url_for('evaluation') }}" class="btn btn-primary">Remplir une évaluation</a>
+
+                    {% if filtre == "archivees" %}
+                        <p class="text-muted mb-4">
+                            Aucune demande archivée pour le moment.
+                        </p>
+                    {% elif filtre == "toutes" %}
+                        <p class="text-muted mb-4">
+                            Aucune demande enregistrée pour le moment.
+                        </p>
+                    {% else %}
+                        <p class="text-muted mb-4">
+                            Aucune demande active pour le moment.
+                        </p>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

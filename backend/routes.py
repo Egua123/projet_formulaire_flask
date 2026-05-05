@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, request, redirect, url_for, flash, abort
 from backend import app, db, bcrypt
-from backend.forms import EvaluationForm, RegistrationForm, LoginForm, UpdateAccountForm
+from backend.forms import EvaluationForm, RegistrationForm, LoginForm, UpdateAccountForm, CoachTraitementForm
 from backend.models import ClientFormEvaluation, User
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -23,36 +23,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/evaluation", methods=["GET", "POST"])
-@login_required
-def evaluation():
-    form = EvaluationForm()
-    if form.validate_on_submit():
 
-        client = ClientFormEvaluation(
-            prenom=form.prenom.data,
-            nom=form.nom.data,
-            email=form.email.data,
-            age=form.age.data,
-            sexe=form.sexe.data,
-            taille=form.taille.data,
-            poids=form.poids.data,
-            objectif=form.objectif.data,
-            heures_sommeil=form.heures_sommeil.data,
-            repas_par_jour=form.repas_par_jour.data,
-            niveau=form.niveau.data,
-            frequence_activite=form.frequence_activite.data,
-        )
-
-        
-
-        db.session.add(client)
-        db.session.commit()
-        flash("La demande a été envoyée avec succès.", "success")
-
-        return redirect(url_for("dashboard_client"))
-
-    return render_template("evaluation.html", form=form, form_action=url_for("evaluation"))
 
 
 @app.route("/submissions")
@@ -62,8 +33,29 @@ def submissions():
         flash("Tu n’as pas accès à cette page.", "danger")
         return redirect_dashboard(current_user)
 
-    demandes = ClientFormEvaluation.query.order_by(ClientFormEvaluation.id.desc()).all()
-    return render_template("submissions.html", demandes=demandes)
+    filtre = request.args.get("filtre", "actives")
+
+    if filtre == "archivees":
+        demandes = ClientFormEvaluation.query.filter_by(
+            is_archived=True
+        ).order_by(ClientFormEvaluation.id.desc()).all()
+
+    elif filtre == "toutes":
+        demandes = ClientFormEvaluation.query.order_by(
+            ClientFormEvaluation.id.desc()
+        ).all()
+
+    else:
+        filtre = "actives"
+        demandes = ClientFormEvaluation.query.filter_by(
+            is_archived=False
+        ).order_by(ClientFormEvaluation.id.desc()).all()
+
+    return render_template(
+        "submissions.html",
+        demandes=demandes,
+        filtre=filtre
+    )
 
 
 
@@ -71,7 +63,7 @@ def submissions():
 def appointment():
     return render_template("appointment.html")
 
-
+"""
 @app.route("/delete/<int:id>", methods=["GET", "POST"])
 def delete(id):
     demande = ClientFormEvaluation.query.get_or_404(id)
@@ -81,6 +73,8 @@ def delete(id):
     flash(f"{nom_complet} a été supprimé.", "Success")
 
     return redirect(url_for("submissions"))
+
+
 
 
 @app.route("/edit/<int:id>", methods=["GET","POST"])
@@ -109,6 +103,73 @@ def edit(id):
         return redirect(url_for("submissions"))
 
     return render_template("evaluation.html", form=form, form_action=url_for("edit", id=demande.id))
+
+
+
+"""
+
+
+@app.route("/coach/demande/<int:id>/archiver", methods=["POST"])
+@login_required
+def archive_demande(id):
+    if current_user.role not in ["coach", "admin"]:
+        flash("Tu n’as pas accès à cette action.", "danger")
+        return redirect_dashboard(current_user)
+
+    demande = ClientFormEvaluation.query.get_or_404(id)
+    demande.is_archived = True
+
+    db.session.commit()
+    flash("La demande a été archivée.", "success")
+
+    return redirect(url_for("submissions", filtre="archivees"))
+
+
+
+@app.route("/coach/demande/<int:id>/desarchiver", methods=["POST"])
+@login_required
+def desarchive_demande(id):
+    if current_user.role not in ["coach", "admin"]:
+        flash("Tu n’as pas accès à cette action.", "danger")
+        return redirect_dashboard(current_user)
+
+    demande = ClientFormEvaluation.query.get_or_404(id)
+    demande.is_archived = False
+
+    db.session.commit()
+    flash("La demande a été désarchivée.", "success")
+
+    return redirect(url_for("submissions", filtre="actives"))
+
+
+@app.route("/coach/demande/<int:id>/traiter", methods=["GET", "POST"])
+@login_required
+def traiter_demande(id):
+    if current_user.role not in ["coach", "admin"]:
+        flash("Tu n’as pas accès à cette action.", "danger")
+        return redirect_dashboard(current_user)
+
+    demande = ClientFormEvaluation.query.get_or_404(id)
+    form = CoachTraitementForm(obj=demande)
+
+    if form.validate_on_submit():
+        demande.status = form.status.data
+        demande.coach_note = form.coach_note.data
+
+        
+
+        db.session.commit()
+        flash("Le suivi de la demande a été mis à jour.", "success")
+        return redirect(url_for("submissions"))
+
+    return render_template(
+        "traiter_demande.html",
+        form=form,
+        demande=demande
+    )
+
+
+
 
 
 
@@ -164,8 +225,12 @@ def login():
 def dashboard_client():
     if current_user.role != "client":
         return redirect_dashboard(current_user)
+    
+    demande = ClientFormEvaluation.query.filter_by(
+        user_id=current_user.id
+    ).first()
 
-    return render_template("dashboard_client.html")
+    return render_template("dashboard_client.html", demande=demande)
 
 
 @app.route("/dashboard-coach")
@@ -224,6 +289,124 @@ def account():
 
         image_file = url_for('static', filename='profile_pics/'+ current_user.image_file)
         return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+
+@app.route("/evaluation", methods=["GET", "POST"])
+@login_required
+def evaluation():
+    if current_user.role != "client":
+        flash("Seuls les clients peuvent remplir une demande d’évaluation.", "danger")
+        return redirect_dashboard(current_user)
+
+    demande_existante = ClientFormEvaluation.query.filter_by(
+        user_id=current_user.id
+    ).first()
+
+    if demande_existante:
+        flash("Tu as déjà une demande d’évaluation. Tu peux la consulter ou la modifier.", "info")
+        return redirect(url_for("client_evaluation"))
+
+    form = EvaluationForm()
+
+    if request.method == "GET":
+        form.email.data = current_user.email
+
+    if form.validate_on_submit():
+        client = ClientFormEvaluation(
+            prenom=form.prenom.data,
+            nom=form.nom.data,
+            email=form.email.data,
+            age=form.age.data,
+            sexe=form.sexe.data,
+            taille=form.taille.data,
+            poids=form.poids.data,
+            objectif=form.objectif.data,
+            heures_sommeil=form.heures_sommeil.data,
+            repas_par_jour=form.repas_par_jour.data,
+            niveau=form.niveau.data,
+            frequence_activite=form.frequence_activite.data,
+            user_id=current_user.id,
+            status="nouvelle"
+        )
+
+        db.session.add(client)
+        db.session.commit()
+
+        flash("La demande a été envoyée avec succès.", "success")
+        return redirect(url_for("client_evaluation"))
+
+    return render_template(
+        "evaluation.html",
+        form=form,
+        form_action=url_for("evaluation")
+    )
+
+
+@app.route("/client/evaluation")
+@login_required
+def client_evaluation():
+    if current_user.role != "client":
+        return redirect_dashboard(current_user)
+
+    demande = ClientFormEvaluation.query.filter_by(
+        user_id=current_user.id
+    ).first()
+
+    return render_template("client_evaluation.html", demande=demande)
+
+
+@app.route("/client/evaluation/update", methods=["GET", "POST"])
+@login_required
+def client_evaluation_update():
+    if current_user.role != "client":
+        return redirect_dashboard(current_user)
+
+    demande = ClientFormEvaluation.query.filter_by(
+        user_id=current_user.id
+    ).first()
+
+    if not demande:
+        flash("Tu dois d’abord remplir une demande avant de pouvoir la modifier.", "info")
+        return redirect(url_for("evaluation"))
+
+
+    # 4. Si la demande est archivée
+    if demande.is_archived:
+        flash("Cette demande est archivée et ne peut plus être modifiée.", "warning")
+        return redirect(url_for("client_evaluation"))
+
+
+    form = EvaluationForm(obj=demande)
+
+    if form.validate_on_submit():
+        demande.prenom = form.prenom.data
+        demande.nom = form.nom.data
+        demande.email = form.email.data
+        demande.age = form.age.data
+        demande.sexe = form.sexe.data
+        demande.taille = form.taille.data
+        demande.poids = form.poids.data
+        demande.objectif = form.objectif.data
+        demande.heures_sommeil = form.heures_sommeil.data
+        demande.repas_par_jour = form.repas_par_jour.data
+        demande.niveau = form.niveau.data
+        demande.frequence_activite = form.frequence_activite.data
+
+        if demande.status in ["approuvee", "refusee"]:
+            demande.status = "nouvelle"
+
+        db.session.commit()
+        flash("Ta demande a été mise à jour.", "success")
+        return redirect(url_for("client_evaluation"))
+
+    return render_template(
+        "evaluation.html",
+        form=form,
+        form_action=url_for("client_evaluation_update")
+    )
+
+
+
 
 
 @app.cli.command("init-db")
