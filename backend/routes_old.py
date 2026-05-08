@@ -34,23 +34,24 @@ def submissions():
         return redirect_dashboard(current_user)
 
     filtre = request.args.get("filtre", "actives")
+    page = request.args.get('page', 1, type=int)
 
     if filtre == "archivees":
-        demandes = ClientFormEvaluation.query.filter_by(
+        query = ClientFormEvaluation.query.filter_by(
             is_archived=True
-        ).order_by(ClientFormEvaluation.id.desc()).all()
-
+        )
+        
     elif filtre == "toutes":
-        demandes = ClientFormEvaluation.query.order_by(
-            ClientFormEvaluation.id.desc()
-        ).all()
+        query = ClientFormEvaluation.query
 
     else:
         filtre = "actives"
-        demandes = ClientFormEvaluation.query.filter_by(
+        query = ClientFormEvaluation.query.filter_by(
             is_archived=False
-        ).order_by(ClientFormEvaluation.id.desc()).all()
+        )
 
+    query = query.order_by(ClientFormEvaluation.created_at.desc())
+    demandes = query.paginate(page=page, per_page=2)
     return render_template(
         "submissions.html",
         demandes=demandes,

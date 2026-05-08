@@ -11,34 +11,36 @@
                     <h1 class="h2 mb-1">Demandes reçues</h1>
                     <p class="text-muted mb-0">Voici les formulaires enregistrés dans la base de données.</p>
                 </div>
-                <a href="{{ url_for('dashboard_coach') }}" class="btn btn-outline-primary">
+
+                <a href="{{ url_for('coach.dashboard_coach') }}" class="btn btn-outline-primary">
                     Retour dashboard coach
                 </a>
             </div>
 
             <div class="d-flex flex-wrap gap-2 mb-4">
-                <a href="{{ url_for('submissions', filtre='actives') }}"
+                <a href="{{ url_for('coach.submissions', filtre='actives') }}"
                    class="btn {% if filtre == 'actives' %}btn-primary{% else %}btn-outline-primary{% endif %}">
                     Actives
                 </a>
 
-                <a href="{{ url_for('submissions', filtre='archivees') }}"
+                <a href="{{ url_for('coach.submissions', filtre='archivees') }}"
                    class="btn {% if filtre == 'archivees' %}btn-primary{% else %}btn-outline-primary{% endif %}">
                     Archivées
                 </a>
 
-                <a href="{{ url_for('submissions', filtre='toutes') }}"
+                <a href="{{ url_for('coach.submissions', filtre='toutes') }}"
                    class="btn {% if filtre == 'toutes' %}btn-primary{% else %}btn-outline-primary{% endif %}">
                     Toutes
                 </a>
             </div>
 
-            {% if demandes %}
+            {% if demandes.items %}
                 <div class="table-responsive">
                     <table class="table table-hover align-middle submission-table">
                         <thead class="table-light">
                             <tr>
                                 <th>ID</th>
+                                <th>Date de création</th>
                                 <th>Nom complet</th>
                                 <th>Email</th>
                                 <th>Âge</th>
@@ -57,9 +59,10 @@
                         </thead>
 
                         <tbody>
-                            {% for demande in demandes %}
+                            {% for demande in demandes.items %}
                                 <tr>
                                     <td>{{ demande.id }}</td>
+                                    <td>{{ demande.created_at.strftime("%d/%m/%Y à %H:%M") }}</td>
                                     <td>{{ demande.prenom }} {{ demande.nom }}</td>
                                     <td>{{ demande.email }}</td>
                                     <td>{{ demande.age }}</td>
@@ -93,20 +96,20 @@
                                     <td>
                                         <div class="d-flex flex-nowrap gap-2">
                                             {% if not demande.is_archived %}
-                                                <a href="{{ url_for('traiter_demande', id=demande.id) }}"
-                                                class="btn btn-sm btn-warning">
+                                                <a href="{{ url_for('coach.traiter_demande', id=demande.id) }}"
+                                                   class="btn btn-sm btn-warning">
                                                     Traiter
                                                 </a>
                                             {% else %}
-                                                <a href="{{ url_for('traiter_demande', id=demande.id) }}"
-                                                class="btn btn-sm btn-outline-warning">
+                                                <a href="{{ url_for('coach.traiter_demande', id=demande.id) }}"
+                                                   class="btn btn-sm btn-outline-warning">
                                                     Voir suivi
                                                 </a>
                                             {% endif %}
 
                                             {% if not demande.is_archived %}
                                                 <form
-                                                    action="{{ url_for('archive_demande', id=demande.id) }}"
+                                                    action="{{ url_for('coach.archive_demande', id=demande.id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Archiver cette demande ?');"
                                                 >
@@ -116,7 +119,7 @@
                                                 </form>
                                             {% else %}
                                                 <form
-                                                    action="{{ url_for('desarchive_demande', id=demande.id) }}"
+                                                    action="{{ url_for('coach.desarchive_demande', id=demande.id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Désarchiver cette demande ?');"
                                                 >
@@ -131,6 +134,26 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+                    {% for page_num in demandes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
+                        {% if page_num %}
+                            {% if demandes.page == page_num %}
+                                <a class="btn btn-info mb-2"
+                                   href="{{ url_for('coach.submissions', page=page_num, filtre=filtre) }}">
+                                    {{ page_num }}
+                                </a>
+                            {% else %}
+                                <a class="btn btn-outline-info mb-2"
+                                   href="{{ url_for('coach.submissions', page=page_num, filtre=filtre) }}">
+                                    {{ page_num }}
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <span class="px-2 align-self-center">...</span>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             {% else %}
                 <div class="empty-state text-center py-5">

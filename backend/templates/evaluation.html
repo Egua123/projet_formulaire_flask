@@ -138,10 +138,15 @@
 
                         <div class="d-grid d-md-flex justify-content-md-end gap-2">
                             {% if current_user.is_authenticated and current_user.role == "client" %}
-                                <a href="{{ url_for('client_evaluation') }}" class="btn btn-outline-secondary">Retour</a>
+                                <a href="{{ url_for('client.client_evaluation') }}" class="btn btn-outline-secondary">
+                                    Retour
+                                </a>
                             {% else %}
-                                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Retour</a>
+                                <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
+                                    Retour
+                                </a>
                             {% endif %}
+
                             {{ form.submit(class="btn btn-primary px-4") }}
                         </div>
                     </form>

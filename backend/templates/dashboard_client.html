@@ -81,7 +81,7 @@
                                 </p>
                             {% endif %}
 
-                            <a href="{{ url_for('client_evaluation') }}" class="btn btn-primary mt-auto">
+                            <a href="{{ url_for('client.client_evaluation') }}" class="btn btn-primary mt-auto">
                                 Voir ma demande
                             </a>
                         {% else %}
@@ -89,7 +89,7 @@
                                 Tu n’as pas encore rempli ton évaluation initiale.
                             </p>
 
-                            <a href="{{ url_for('evaluation') }}" class="btn btn-primary mt-auto">
+                            <a href="{{ url_for('client.evaluation') }}" class="btn btn-primary mt-auto">
                                 Remplir ma demande
                             </a>
                         {% endif %}
@@ -104,7 +104,7 @@
                         <p class="card-text text-muted">
                             Accède à la page de prise de rendez-vous pour planifier un suivi avec ton coach.
                         </p>
-                        <a href="{{ url_for('appointment') }}" class="btn btn-primary mt-auto">
+                        <a href="{{ url_for('main.appointment') }}" class="btn btn-primary mt-auto">
                             Prendre rendez-vous
                         </a>
                     </div>
@@ -118,7 +118,7 @@
                         <p class="card-text text-muted">
                             Consulte ton programme personnalisé lorsqu’il sera disponible.
                         </p>
-                        <!-- Route à ajouter plus tard, par exemple url_for('client_program') -->
+                        <!-- Route à ajouter plus tard, par exemple url_for('client.program') -->
                         <a href="#" class="btn btn-outline-primary mt-auto">
                             Voir mon programme
                         </a>
@@ -133,7 +133,7 @@
                         <p class="card-text text-muted">
                             Retrouve les messages, commentaires ou suivis envoyés par ton coach.
                         </p>
-                        <!-- Route à ajouter plus tard, par exemple url_for('client_messages') -->
+                        <!-- Route à ajouter plus tard, par exemple url_for('client.messages') -->
                         <a href="#" class="btn btn-outline-primary mt-auto">
                             Voir mes suivis
                         </a>
@@ -148,7 +148,7 @@
                         <p class="card-text text-muted">
                             Consulte ou modifie les informations de ton compte utilisateur.
                         </p>
-                        <a href="{{ url_for('account') }}" class="btn btn-outline-primary mt-auto">
+                        <a href="{{ url_for('users.account') }}" class="btn btn-outline-primary mt-auto">
                             Accéder à mon compte
                         </a>
                     </div>

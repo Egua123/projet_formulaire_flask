@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashbord client{% endblock %}
+{% block title %}Dashboard admin{% endblock %}
 
 {% block content %}
-    <h1 class="display-5 fw-bold mb-3">
-                            dashboard Admin de {{current_user.username}}
-    </h1>
+<section class="py-5">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">
+            Dashboard Admin de {{ current_user.username }}
+        </h1>
 
+        <p class="text-muted">
+            Espace administrateur en cours de développement.
+        </p>
+    </div>
+</section>
 {% endblock %}

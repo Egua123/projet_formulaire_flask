@@ -10,22 +10,24 @@
         crossorigin="anonymous"
     >
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    
+
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark app-navbar shadow-sm">
 
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">App Coaching</a>
+            <a class="navbar-brand fw-bold" href="{{ url_for('main.index') }}">
+                App Coaching
+            </a>
 
-            <button 
-                class="navbar-toggler" 
-                type="button" 
-                data-bs-toggle="collapse" 
-                data-bs-target="#mainNavbar" 
-                aria-controls="mainNavbar" 
-                aria-expanded="false" 
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
                 aria-label="Toggle navigation"
             >
                 <span class="navbar-toggler-icon"></span>
@@ -33,42 +35,52 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                 <div class="navbar-nav align-items-lg-center gap-lg-2">
-                    <a class="nav-link custom-nav-link" href="{{ url_for('index') }}">Accueil</a>
+                    <a class="nav-link custom-nav-link" href="{{ url_for('main.index') }}">
+                        Accueil
+                    </a>
+
                     {% if current_user.is_authenticated and current_user.role == "client" %}
-                        <a class="nav-link custom-nav-link" href="{{ url_for('client_evaluation') }}">
+                        <a class="nav-link custom-nav-link" href="{{ url_for('client.client_evaluation') }}">
                             Ma demande
                         </a>
                     {% endif %}
+
                     {% if current_user.is_authenticated and (current_user.role == "coach" or current_user.role == "admin") %}
-                        <a class="nav-link custom-nav-link" href="{{ url_for('submissions') }}">Demandes</a>
+                        <a class="nav-link custom-nav-link" href="{{ url_for('coach.submissions') }}">
+                            Demandes
+                        </a>
                     {% endif %}
 
                     {% if current_user.is_authenticated %}
 
-                    {% if current_user.role == "coach" %}
-                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('dashboard_coach') }}">
-                            Dashboard
-                        </a>
-                    {% else %}
-                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('dashboard_client') }}">
-                            Dashboard
-                        </a>
-                    {% endif %}
+                        {% if current_user.role == "coach" %}
+                            <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('coach.dashboard_coach') }}">
+                                Dashboard
+                            </a>
+                        {% elif current_user.role == "admin" %}
+                            <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('admin.dashboard_admin') }}">
+                                Dashboard
+                            </a>
+                        {% else %}
+                            <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('client.dashboard_client') }}">
+                                Dashboard
+                            </a>
+                        {% endif %}
 
-                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('account') }}">
+                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('users.account') }}">
                             Account
                         </a>
 
-                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('logout') }}">
+                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('auth.logout') }}">
                             Logout
                         </a>
 
                     {% else %}
-                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('login') }}">
+                        <a class="btn btn-outline-light ms-lg-2 mt-2 mt-lg-0 px-3" href="{{ url_for('auth.login') }}">
                             Login
                         </a>
-                    
-                        <button 
+
+                        <button
                             type="button"
                             class="btn btn-primary ms-lg-2 mt-2 mt-lg-0 px-3"
                             data-bs-toggle="modal"
@@ -82,68 +94,63 @@
         </div>
     </nav>
 
+    <!-- MODAL CHOIX INSCRIPTION -->
+    <div
+        class="modal fade"
+        id="registerChoiceModal"
+        tabindex="-1"
+        aria-labelledby="registerChoiceModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content register-modal">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="registerChoiceModalLabel">
+                        Choisir un type de compte
+                    </h5>
 
-                <!-- FLASH MESSAGES -->
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fermer"
+                    ></button>
+                </div>
 
-        <!-- MODAL CHOIX INSCRIPTION -->
-        <div 
-            class="modal fade" 
-            id="registerChoiceModal" 
-            tabindex="-1" 
-            aria-labelledby="registerChoiceModalLabel" 
-            aria-hidden="true"
-        >
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content register-modal">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold" id="registerChoiceModalLabel">
-                            Choisir un type de compte
-                        </h5>
+                <div class="modal-body pt-0">
+                    <div class="d-grid gap-3">
+                        <a
+                            class="btn btn-primary btn-lg"
+                            href="{{ url_for('auth.register_role', role='client') }}"
+                        >
+                            Créer un compte client
+                        </a>
 
-                        <button 
-                            type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="modal" 
-                            aria-label="Fermer"
-                        ></button>
-                    </div>
-
-                    <div class="modal-body pt-0">
-                        <div class="d-grid gap-3">
-                            <a 
-                                class="btn btn-primary btn-lg"
-                                href="{{ url_for('register_role', role='client') }}"
-                            >
-                                Créer un compte client
-                            </a>
-
-                            <a 
-                                class="btn btn-outline-primary btn-lg"
-                                href="{{ url_for('register_role', role='coach') }}"
-                            >
-                                Créer un compte coach
-                            </a>
-                        </div>
+                        <a
+                            class="btn btn-outline-primary btn-lg"
+                            href="{{ url_for('auth.register_role', role='coach') }}"
+                        >
+                            Créer un compte coach
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-
-
-
-        <div class="container mt-3">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
+    <!-- FLASH MESSAGES -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
     <main role="main" class="main-content">
         {% block content %}{% endblock %}

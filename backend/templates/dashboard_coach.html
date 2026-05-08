@@ -65,7 +65,7 @@
                         <p class="card-text text-muted">
                             Voir les formulaires d’évaluation envoyés par les clients.
                         </p>
-                        <a href="{{ url_for('submissions') }}" class="btn btn-primary mt-auto">
+                        <a href="{{ url_for('coach.submissions') }}" class="btn btn-primary mt-auto">
                             Voir les demandes
                         </a>
                     </div>
@@ -79,7 +79,7 @@
                         <p class="card-text text-muted">
                             Accède à la liste de tes clients et à leurs informations de suivi.
                         </p>
-                        <!-- Route à ajouter plus tard, par exemple url_for('coach_clients') -->
+                        <!-- Route à ajouter plus tard, par exemple url_for('coach.clients') -->
                         <a href="#" class="btn btn-outline-primary mt-auto">
                             Gérer les clients
                         </a>
@@ -94,7 +94,7 @@
                         <p class="card-text text-muted">
                             Consulte ou organise les rendez-vous avec tes clients.
                         </p>
-                        <!-- Route à ajouter plus tard, par exemple url_for('coach_appointments') -->
+                        <!-- Route à ajouter plus tard, par exemple url_for('coach.appointments') -->
                         <a href="#" class="btn btn-outline-primary mt-auto">
                             Voir les rendez-vous
                         </a>
@@ -109,7 +109,7 @@
                         <p class="card-text text-muted">
                             Crée ou gère les programmes d’entraînement personnalisés.
                         </p>
-                        <!-- Route à ajouter plus tard, par exemple url_for('coach_programs') -->
+                        <!-- Route à ajouter plus tard, par exemple url_for('coach.programs') -->
                         <a href="#" class="btn btn-outline-primary mt-auto">
                             Gérer les programmes
                         </a>
@@ -124,7 +124,7 @@
                         <p class="card-text text-muted">
                             Consulte ou modifie les informations de ton compte coach.
                         </p>
-                        <a href="{{ url_for('account') }}" class="btn btn-outline-primary mt-auto">
+                        <a href="{{ url_for('users.account') }}" class="btn btn-outline-primary mt-auto">
                             Accéder à mon compte
                         </a>
                     </div>

@@ -15,7 +15,7 @@
                         Inscris-toi pour accéder à ton espace coaching.
                     </p>
 
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ request.path }}">
                         {{ form.hidden_tag() }}
 
                         <div class="mb-3">
@@ -86,7 +86,7 @@
                     <div class="border-top pt-3 mt-4 text-center">
                         <small class="text-muted">
                             Tu as déjà un compte ?
-                            <a href="{{ url_for('login') }}" class="fw-semibold text-decoration-none">
+                            <a href="{{ url_for('auth.login') }}" class="fw-semibold text-decoration-none">
                                 Connecte-toi
                             </a>
                         </small>
